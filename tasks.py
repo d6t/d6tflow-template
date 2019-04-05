@@ -2,8 +2,10 @@
 import d6tflow
 import luigi
 from luigi.util import inherits
-import sklearn, sklearn.datasets, sklearn.svm
+import sklearn, sklearn.datasets
+from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
+
 
 import cfg
 
@@ -16,7 +18,7 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
         df_train['y'] = iris.target
         self.save(df_train) # quickly save dataframe
 
-class TaskPreprocess(d6tflow.tasks.TaskCachePandas):  # save data in memory
+class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
     do_preprocess = luigi.BoolParameter(default=True) # parameter for preprocessing yes/no
 
     def requires(self):
@@ -36,7 +38,6 @@ class TaskTrain(d6tflow.tasks.TaskPickle): # save output as pickle
 
     def run(self):
         df_train = self.input().load()
-        model = sklearn.svm.SVC()
+        model = RandomForestClassifier(n_jobs=2, random_state=0)
         model.fit(df_train.iloc[:,:-1], df_train['y'])
         self.save(model)
-

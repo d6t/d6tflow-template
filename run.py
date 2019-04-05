@@ -9,10 +9,11 @@ d6tflow.run(tasks.TaskTrain())
 
 # use output
 visualize.accuracy()
+visualize.plot_importances()
 
 # change parameter and rerun
 d6tflow.run(tasks.TaskTrain(do_preprocess=False))
-visualize.accuracy()
+visualize.accuracy(do_preprocess=False) # task output is parameter specific
 
 # rerun flow after code changes
 import importlib

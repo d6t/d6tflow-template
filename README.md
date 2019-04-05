@@ -2,6 +2,8 @@
 
 Templates with common design patterns for https://github.com/d6t/d6tflow
 
+They allow you to have a clean and scalable project structure for data science projects.
+
 ## Structure
 
 `task.py`: workflow tasks  

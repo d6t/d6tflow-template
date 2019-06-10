@@ -11,15 +11,18 @@ import cfg
 
 # define workflow
 class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
+    dt_start = luigi.DateParameter(default=cfg.dt_start)
+    dt_end = luigi.DateParameter(default=cfg.dt_end)
 
     def run(self):
         iris = sklearn.datasets.load_iris()
         df_train = pd.DataFrame(iris.data,columns=['feature{}'.format(i) for i in range(4)])
         df_train['y'] = iris.target
+        # optional: df_train[df_train['date']>=self.dt_start]
         self.save(df_train) # quickly save dataframe
 
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
-    do_preprocess = luigi.BoolParameter(default=True) # parameter for preprocessing yes/no
+    do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess) # parameter for preprocessing yes/no
 
     def requires(self):
         return TaskGetData() # define dependency

@@ -9,8 +9,7 @@ import pandas as pd
 
 import cfg
 
-# define workflow
-class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
+class TaskGetData(d6tflow.tasks.TaskPqPandas):
     dt_start = luigi.DateParameter(default=cfg.dt_start)
     dt_end = luigi.DateParameter(default=cfg.dt_end)
 
@@ -22,19 +21,19 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
         self.save(df_train) # quickly save dataframe
 
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
-    do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess) # parameter for preprocessing yes/no
+    do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess)
 
     def requires(self):
-        return TaskGetData() # define dependency
+        return TaskGetData()
 
     def run(self):
-        df_train = self.input().load() # quickly load required data
+        df_train = self.input().load()
         if self.do_preprocess:
             df_train.iloc[:,:-1] = sklearn.preprocessing.scale(df_train.iloc[:,:-1])
         self.save(df_train)
 
-@inherits(TaskPreprocess) # inherit do_preprocess param see https://luigi.readthedocs.io/en/stable/api/luigi.util.html#using-inherits-and-requires-to-ease-parameter-pain
-class TaskTrain(d6tflow.tasks.TaskPickle): # save output as pickle
+@inherits(TaskPreprocess)
+class TaskTrain(d6tflow.tasks.TaskPickle):
 
     def requires(self):
         return self.clone_parent()

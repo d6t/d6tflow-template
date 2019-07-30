@@ -2,7 +2,9 @@ import sklearn
 import tasks
 import pandas as pd
 
-def accuracy(do_preprocess=False):
+import cfg
+
+def accuracy(do_preprocess=cfg.do_preprocess):
     model = tasks.TaskTrain(do_preprocess).output().load()
     df_train = tasks.TaskPreprocess().output().load()
     print(sklearn.metrics.accuracy_score(df_train['y'],model.predict(df_train.iloc[:,:-1])))

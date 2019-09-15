@@ -1,7 +1,5 @@
-
 import d6tflow
 import luigi
-from luigi.util import inherits
 import sklearn, sklearn.datasets
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
@@ -33,11 +31,9 @@ class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
             df_train.iloc[:,:-1] = sklearn.preprocessing.scale(df_train.iloc[:,:-1])
         self.save(df_train)
 
-@inherits(TaskPreprocess) # inherit do_preprocess param see https://luigi.readthedocs.io/en/stable/api/luigi.util.html#using-inherits-and-requires-to-ease-parameter-pain
+@d6tflow.inherits(TaskPreprocess) # inherit do_preprocess param see https://luigi.readthedocs.io/en/stable/api/luigi.util.html#using-inherits-and-requires-to-ease-parameter-pain
+@d6tflow.clone_parent
 class TaskTrain(d6tflow.tasks.TaskPickle): # save output as pickle
-
-    def requires(self):
-        return self.clone_parent()
 
     def run(self):
         df_train = self.input().load()

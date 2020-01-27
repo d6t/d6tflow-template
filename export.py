@@ -17,3 +17,4 @@ if do_push:
     d6tflow.pipes.init(cfg_pipe,profile=cfg_profile, reset=True)
     pipe = d6tflow.pipes.get_pipe()
     pipe.push_preview()
+    pipe.push()

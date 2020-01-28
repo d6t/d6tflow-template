@@ -2,7 +2,7 @@ import d6tflow
 import cfg, tasks, visualize
 
 # Check task dependencies and their execution status
-d6tflow.show(tasks.TaskTrain())
+d6tflow.preview(tasks.TaskTrain())
 
 # Execute the model training task including dependencies
 d6tflow.run(tasks.TaskTrain())
@@ -23,5 +23,5 @@ importlib.reload(tasks)
 # say you changed TaskGetData, reset all tasks depending on TaskGetData
 d6tflow.invalidate_downstream(tasks.TaskGetData(), tasks.TaskTrain())
 
-d6tflow.show(tasks.TaskTrain())
+d6tflow.preview(tasks.TaskTrain())
 d6tflow.run(tasks.TaskTrain())

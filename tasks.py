@@ -18,11 +18,9 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):
         # optional: df_train[df_train['date']>=self.dt_start]
         self.save(df_train) # quickly save dataframe
 
+@d6tflow.requires(TaskGetData)
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
     do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess)
-
-    def requires(self):
-        return TaskGetData()
 
     def run(self):
         df_train = self.input().load()
@@ -30,8 +28,7 @@ class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
             df_train.iloc[:,:-1] = sklearn.preprocessing.scale(df_train.iloc[:,:-1])
         self.save(df_train)
 
-@d6tflow.inherits(TaskPreprocess)
-@d6tflow.clone_parent
+@d6tflow.requires(TaskPreprocess)
 class TaskTrain(d6tflow.tasks.TaskPickle):
 
     def run(self):

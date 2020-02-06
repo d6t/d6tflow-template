@@ -8,8 +8,8 @@ import pandas as pd
 import cfg
 
 # define workflow
-class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
-    dt_start = luigi.DateParameter(default=cfg.dt_start)
+class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet, see https://d6tflow.readthedocs.io/en/latest/targets.html
+    dt_start = luigi.DateParameter(default=cfg.dt_start) # workflow parameters. See https://d6tflow.readthedocs.io/en/latest/advparam.html
     dt_end = luigi.DateParameter(default=cfg.dt_end)
 
     def run(self):
@@ -19,20 +19,17 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet
         # optional: df_train[df_train['date']>=self.dt_start]
         self.save(df_train) # quickly save dataframe
 
+@d6tflow.requires(TaskGetData) # define dependency. See https://d6tflow.readthedocs.io/en/latest/tasks.html
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
     do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess) # parameter for preprocessing yes/no
 
-    def requires(self):
-        return TaskGetData() # define dependency
-
     def run(self):
-        df_train = self.input().load() # quickly load required data
+        df_train = self.input().load() # quickly load required data, see https://d6tflow.readthedocs.io/en/latest/tasks.html#load-input-data
         if self.do_preprocess:
             df_train.iloc[:,:-1] = sklearn.preprocessing.scale(df_train.iloc[:,:-1])
-        self.save(df_train)
+        self.save(df_train) # save task output, see https://d6tflow.readthedocs.io/en/latest/tasks.html#save-output-data
 
-@d6tflow.inherits(TaskPreprocess) # inherit do_preprocess param see https://luigi.readthedocs.io/en/stable/api/luigi.util.html#using-inherits-and-requires-to-ease-parameter-pain
-@d6tflow.clone_parent
+@d6tflow.requires(TaskPreprocess) # define dependency. See https://d6tflow.readthedocs.io/en/latest/tasks.html
 class TaskTrain(d6tflow.tasks.TaskPickle): # save output as pickle
 
     def run(self):

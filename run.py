@@ -4,14 +4,14 @@ import cfg, tasks, visualize
 # Check task dependencies and their execution status
 d6tflow.preview(tasks.TaskTrain())
 
-# Execute the model training task including dependencies
+# Execute the model training task including dependencies. See https://d6tflow.readthedocs.io/en/latest/run.html
 d6tflow.run(tasks.TaskTrain())
 
 # use output
 visualize.accuracy()
 visualize.plot_importances()
 
-# change parameter and rerun
+# change parameter and rerun, see https://d6tflow.readthedocs.io/en/latest/advparam.html
 d6tflow.run(tasks.TaskTrain(do_preprocess=False))
 visualize.accuracy(do_preprocess=False) # task output is parameter specific
 

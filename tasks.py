@@ -16,7 +16,7 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):
         df_train = pd.DataFrame(iris.data,columns=['feature{}'.format(i) for i in range(4)])
         df_train['y'] = iris.target
         # optional: df_train[df_train['date']>=self.dt_start]
-        self.save(df_train) # quickly save dataframe
+        self.save(df_train)
 
 @d6tflow.requires(TaskGetData)
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):

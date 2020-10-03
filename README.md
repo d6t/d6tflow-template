@@ -15,3 +15,8 @@ Templates with common design patterns for https://github.com/d6t/d6tflow
 ## Clean branch
 
 For repeat usage you don't need all those comments and can use the clean branch. Clone into an existing folder using `git clone -b clean --single-branch https://github.com/d6t/d6tflow-template.git .`
+
+## Minimal branch
+
+For frequent users with a variety of projects, this is the best starting point. Available as zip https://github.com/d6t/d6tflow-template/raw/master/d6tflow-template-minimal.zip
+

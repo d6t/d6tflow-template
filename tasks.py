@@ -9,8 +9,8 @@ import cfg
 
 # define workflow
 class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet, see https://d6tflow.readthedocs.io/en/latest/targets.html
-    dt_start = luigi.DateParameter(default=cfg.dt_start) # workflow parameters. See https://d6tflow.readthedocs.io/en/latest/advparam.html
-    dt_end = luigi.DateParameter(default=cfg.dt_end)
+    dt_start = d6tflow.DateParameter(default=cfg.dt_start) # workflow parameters. See https://d6tflow.readthedocs.io/en/latest/advparam.html
+    dt_end = d6tflow.DateParameter(default=cfg.dt_end)
 
     def run(self):
         iris = sklearn.datasets.load_iris()

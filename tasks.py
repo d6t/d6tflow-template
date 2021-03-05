@@ -1,5 +1,4 @@
 import d6tflow
-import luigi
 import sklearn, sklearn.datasets
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
@@ -9,8 +8,8 @@ import cfg
 
 # define workflow
 class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet, see https://d6tflow.readthedocs.io/en/latest/targets.html
-    dt_start = luigi.DateParameter(default=cfg.dt_start) # workflow parameters. See https://d6tflow.readthedocs.io/en/latest/advparam.html
-    dt_end = luigi.DateParameter(default=cfg.dt_end)
+    dt_start = d6tflow.DateParameter(default=cfg.dt_start) # workflow parameters. See https://d6tflow.readthedocs.io/en/latest/advparam.html
+    dt_end = d6tflow.DateParameter(default=cfg.dt_end)
 
     def run(self):
         iris = sklearn.datasets.load_iris()
@@ -21,7 +20,7 @@ class TaskGetData(d6tflow.tasks.TaskPqPandas):  # save dataframe as parquet, see
 
 @d6tflow.requires(TaskGetData) # define dependency. See https://d6tflow.readthedocs.io/en/latest/tasks.html
 class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
-    do_preprocess = luigi.BoolParameter(default=cfg.do_preprocess) # parameter for preprocessing yes/no
+    do_preprocess = d6tflow.BoolParameter(default=cfg.do_preprocess) # parameter for preprocessing yes/no
 
     def run(self):
         df_train = self.input().load() # quickly load required data, see https://d6tflow.readthedocs.io/en/latest/tasks.html#load-input-data

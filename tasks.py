@@ -1,5 +1,4 @@
 import d6tflow
-import luigi
 import pandas as pd
 
 
@@ -13,7 +12,7 @@ class GetData(d6tflow.tasks.TaskPqPandas):
 
 @d6tflow.requires(GetData)
 class Process(d6tflow.tasks.TaskPqPandas):
-    optional = luigi.BoolParameter(default=False)
+    optional = d6tflow.BoolParameter(default=False)
 
     def run(self):
         df = self.input().load()

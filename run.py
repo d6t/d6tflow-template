@@ -2,17 +2,19 @@ import d6tflow
 import cfg, tasks, visualize
 
 # Check task dependencies and their execution status
-d6tflow.preview(tasks.TaskTrain())
+flow = d6tflow.Workflow()
+flow.preview(tasks.TaskTrain)
 
 # Execute the model training task including dependencies. See https://d6tflow.readthedocs.io/en/latest/run.html
-d6tflow.run(tasks.TaskTrain())
+flow.run(tasks.TaskTrain)
 
 # use output
 visualize.accuracy()
 visualize.plot_importances()
 
 # change parameter and rerun, see https://d6tflow.readthedocs.io/en/latest/advparam.html
-d6tflow.run(tasks.TaskTrain(do_preprocess=False))
+flow1 = d6tflow.Workflow(params = {'do_preprocess': False})
+flow1.run(tasks.TaskTrain)
 visualize.accuracy(do_preprocess=False) # task output is parameter specific
 
 # rerun flow after code changes
@@ -21,7 +23,8 @@ importlib.reload(cfg)
 importlib.reload(tasks)
 
 # say you changed TaskGetData, reset all tasks depending on TaskGetData
-d6tflow.invalidate_downstream(tasks.TaskGetData(), tasks.TaskTrain())
+flow.reset_downstream(tasks.TaskGetData, tasks.TaskTrain)
+flow1.reset_downstream(tasks.TaskGetData, tasks.TaskTrain)
 
-d6tflow.preview(tasks.TaskTrain())
-d6tflow.run(tasks.TaskTrain())
+flow.preview(tasks.TaskTrain)
+flow.run(tasks.TaskTrain)

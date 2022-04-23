@@ -30,9 +30,14 @@ class TaskPreprocess(d6tflow.tasks.TaskPqPandas):
 
 @d6tflow.requires(TaskPreprocess) # define dependency. See https://d6tflow.readthedocs.io/en/latest/tasks.html
 class TaskTrain(d6tflow.tasks.TaskPickle): # save output as pickle
+    model = d6tflow.BoolParameter(default='rf')
 
     def run(self):
         df_train = self.input().load()
-        model = RandomForestClassifier(n_jobs=2, random_state=0)
+        if self.model=='rf':
+            model = RandomForestClassifier(n_jobs=2, random_state=0)
+        else:
+            model = RandomForestClassifier(n_jobs=2, random_state=0)
+        
         model.fit(df_train.iloc[:,:-1], df_train['y'])
         self.save(model)

@@ -23,8 +23,8 @@ importlib.reload(cfg)
 importlib.reload(tasks)
 
 # say you changed TaskGetData, reset all tasks depending on TaskGetData
-flow.reset_downstream(tasks.TaskGetData, tasks.TaskTrain)
-flow1.reset_downstream(tasks.TaskGetData, tasks.TaskTrain)
+flow.reset(tasks.TaskGetData)
+flow1.reset(tasks.TaskGetData)
 
 flow.preview()
 flow.run()
